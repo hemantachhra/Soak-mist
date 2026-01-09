@@ -1,0 +1,5 @@
+{
+  "name": "Soak mist",
+  "description": "A comprehensive inventory management system for tracking raw materials, production, and sales of Mist and Soak products with automated stock alerts and WhatsApp reporting.",
+  "requestFramePermissions": []
+}
