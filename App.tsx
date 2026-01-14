@@ -8,17 +8,10 @@ import {
   ArrowUpRight, 
   AlertTriangle, 
   Share2, 
-  History, 
-  Trash2, 
-  Copy, 
-  CheckCircle2, 
   Settings as SettingsIcon, 
   Save, 
   FlaskConical, 
   Box, 
-  CheckCircle,
-  XCircle,
-  Pencil,
   X
 } from 'lucide-react';
 import { INITIAL_INVENTORY, PRODUCTS as INITIAL_PRODUCTS } from './constants';
@@ -36,16 +29,14 @@ const Button = ({
   variant = 'primary', 
   className = "",
   disabled = false,
-  type = "button",
-  title
+  type = "button"
 }: { 
   children?: React.ReactNode, 
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void, 
   variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'success',
   className?: string,
   disabled?: boolean,
-  type?: "button" | "submit",
-  title?: string
+  type?: "button" | "submit"
 }) => {
   const variants = {
     primary: "bg-indigo-600 text-white hover:bg-indigo-700",
@@ -59,7 +50,6 @@ const Button = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      title={title}
       className={`px-3 py-2.5 rounded-lg font-black text-[13px] transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${variants[variant]} ${className}`}
     >
       {children}
@@ -96,7 +86,6 @@ const Select = ({ label, options, ...props }: any) => (
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'inventory' | 'production' | 'purchases' | 'sales' | 'reports' | 'settings'>('dashboard');
   const [showSavedToast, setShowSavedToast] = useState(false);
-  const [editingTx, setEditingTx] = useState<Transaction | null>(null);
 
   const [inventory, setInventory] = useState<StockItem[]>(() => {
     const saved = localStorage.getItem('inventory');
@@ -120,10 +109,8 @@ const App: React.FC = () => {
     localStorage.setItem('transactions', JSON.stringify(transactions));
   }, [inventory, products, transactions]);
 
-  // Internal date is YYYY-MM-DD for standard input compat
   const todayRaw = new Date().toISOString().split('T')[0];
 
-  // Helper to convert YYYY-MM-DD to DD/MM/YYYY
   const formatToDDMMYYYY = (dateStr: string) => {
     if (!dateStr) return '';
     const parts = dateStr.split('-');
@@ -256,13 +243,12 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col text-[14px] overflow-x-hidden">
-      {/* STICKY HEADER */}
       <header className="bg-slate-900 border-b border-slate-800 sticky top-0 z-[100] h-14 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
           <h1 className="text-[16px] font-black text-white uppercase tracking-tighter">InvControl</h1>
           <nav className="hidden md:flex items-center gap-1 h-full">
             <NavTab active={activeTab === 'dashboard'} onClick={() => setActiveTab('dashboard')} icon={<LayoutDashboard size={16}/>} label="Home" />
-            <NavTab active={activeTab === 'inventory'} onClick={() => setActiveTab('inventory')} icon={<Package size={16}/>} label="Stock Sheet" />
+            <NavTab active={activeTab === 'inventory'} onClick={() => setActiveTab('inventory')} icon={<Package size={16}/>} label="Stock" />
             <NavTab active={activeTab === 'production'} onClick={() => setActiveTab('production')} icon={<Factory size={16}/>} label="Produce" />
             <NavTab active={activeTab === 'purchases'} onClick={() => setActiveTab('purchases')} icon={<ShoppingCart size={16}/>} label="Purchase" />
             <NavTab active={activeTab === 'sales'} onClick={() => setActiveTab('sales')} icon={<ArrowUpRight size={16}/>} label="Sale" />
@@ -282,8 +268,8 @@ const App: React.FC = () => {
           <div className="space-y-4">
              <h2 className="text-[18px] font-black uppercase tracking-tighter">Summary ({todayFormatted})</h2>
              <div className="grid grid-cols-2 gap-3">
-               <StatsCard title="Boxes Produced Today" value={todayTransactions.filter(t => t.type === 'Production').reduce((acc, t) => acc + t.quantity, 0)} icon={<Factory size={18} className="text-indigo-400"/>} />
-               <StatsCard title="Boxes Sold Today" value={todayTransactions.filter(t => t.type === 'Sale').reduce((acc, t) => acc + t.quantity, 0)} icon={<ShoppingCart size={18} className="text-emerald-400"/>} />
+               <StatsCard title="Produced Today" value={todayTransactions.filter(t => t.type === 'Production').reduce((acc, t) => acc + t.quantity, 0)} icon={<Factory size={18} className="text-indigo-400"/>} />
+               <StatsCard title="Sold Today" value={todayTransactions.filter(t => t.type === 'Sale').reduce((acc, t) => acc + t.quantity, 0)} icon={<ShoppingCart size={18} className="text-emerald-400"/>} />
              </div>
 
              {lowStockItems.length > 0 && (
@@ -295,7 +281,7 @@ const App: React.FC = () => {
                 <div className="flex flex-wrap gap-2">
                   {lowStockItems.map(item => (
                     <span key={item.id} className="px-2 py-1 bg-white rounded border border-amber-200 text-[11px] font-bold text-amber-900">
-                      {item.name}: {formatNumber(item.currentStock)} {item.unit}
+                      {item.name}: {formatNumber(item.currentStock)}
                     </span>
                   ))}
                 </div>
@@ -304,8 +290,8 @@ const App: React.FC = () => {
 
              <Card>
                 <div className="p-3 border-b bg-slate-50 flex justify-between items-center">
-                  <h3 className="font-black text-[12px] uppercase tracking-wider">Today's Activity ({todayFormatted})</h3>
-                  <button onClick={() => setActiveTab('inventory')} className="text-[11px] font-black text-indigo-600 underline">View Full Sheet</button>
+                  <h3 className="font-black text-[12px] uppercase tracking-wider">Today's Activity</h3>
+                  <button onClick={() => setActiveTab('inventory')} className="text-[11px] font-black text-indigo-600 underline">Full Sheet</button>
                 </div>
                 <div className="divide-y">
                   {todayTransactions.length === 0 ? (
@@ -336,18 +322,17 @@ const App: React.FC = () => {
         {activeTab === 'inventory' && (
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <h2 className="text-[18px] font-black uppercase tracking-tighter">Stock Sheet ({todayFormatted})</h2>
-              <button onClick={() => shareViaWhatsApp(generateBalanceReport())} className="flex items-center gap-1 text-[11px] font-black bg-indigo-600 text-white px-3 py-1.5 rounded uppercase"><Share2 size={12}/> Share Sheet</button>
+              <h2 className="text-[18px] font-black uppercase tracking-tighter">Stock Sheet</h2>
+              <button onClick={() => shareViaWhatsApp(generateBalanceReport())} className="flex items-center gap-1 text-[11px] font-black bg-indigo-600 text-white px-3 py-1.5 rounded uppercase"><Share2 size={12}/> Share</button>
             </div>
             <Card className="overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
                   <thead className="bg-slate-900 text-[10px] font-black text-slate-400 uppercase tracking-widest">
                     <tr>
-                      <th className="px-4 py-3">Item Name</th>
+                      <th className="px-4 py-3">Item</th>
                       <th className="px-4 py-3 text-right">Balance</th>
-                      <th className="px-4 py-3 text-right">Min Buffer</th>
-                      <th className="px-4 py-3 text-center">Stat</th>
+                      <th className="px-4 py-3 text-center">Status</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y">
@@ -358,9 +343,8 @@ const App: React.FC = () => {
                           <span className="font-black text-slate-900">{formatNumber(item.currentStock)}</span>
                           <span className="ml-1 text-[10px] text-slate-400 font-bold uppercase">{item.unit}</span>
                         </td>
-                        <td className="px-4 py-2.5 text-right text-slate-400 font-bold">{formatNumber(item.bufferStock)}</td>
                         <td className="px-4 py-2.5 text-center">
-                          <div className={`w-2 h-2 rounded-full mx-auto ${item.currentStock <= item.bufferStock ? 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]' : 'bg-emerald-500'}`}></div>
+                          <div className={`w-2 h-2 rounded-full mx-auto ${item.currentStock <= item.bufferStock ? 'bg-amber-500' : 'bg-emerald-500'}`}></div>
                         </td>
                       </tr>
                     ))}
@@ -371,10 +355,9 @@ const App: React.FC = () => {
           </div>
         )}
 
-        {/* LOG PRODUCTION - NO LAYOUT SHIFT */}
         {activeTab === 'production' && (
            <div className="max-w-2xl mx-auto space-y-4">
-              <h2 className="text-[18px] font-black uppercase tracking-tighter flex items-center gap-2"><Factory size={20} className="text-indigo-600"/> Log Production</h2>
+              <h2 className="text-[18px] font-black uppercase tracking-tighter flex items-center gap-2">Produce</h2>
               <Card className="p-6 border-t-4 border-indigo-600">
                 <form className="space-y-5" onSubmit={(e) => {
                   e.preventDefault();
@@ -388,19 +371,18 @@ const App: React.FC = () => {
                   e.currentTarget.reset();
                   alert('Production Saved.');
                 }}>
-                  <Input label="Production Date" name="date" type="date" required defaultValue={todayRaw} />
-                  <Select label="Select Product" name="product" options={products.map(p => ({ label: p.name.toUpperCase(), value: p.id }))} />
-                  <Input label="No. of Boxes Produced" name="quantity" type="number" required placeholder="Boxes" />
-                  <Button className="w-full uppercase tracking-wider h-11 text-[13px]" type="submit">Confirm Production</Button>
+                  <Input label="Date" name="date" type="date" required defaultValue={todayRaw} />
+                  <Select label="Product" name="product" options={products.map(p => ({ label: p.name.toUpperCase(), value: p.id }))} />
+                  <Input label="Boxes Produced" name="quantity" type="number" required />
+                  <Button className="w-full uppercase h-11" type="submit">Log Production</Button>
                 </form>
               </Card>
            </div>
         )}
 
-        {/* LOG SALE - NO LAYOUT SHIFT */}
         {activeTab === 'sales' && (
            <div className="max-w-2xl mx-auto space-y-4">
-              <h2 className="text-[18px] font-black uppercase tracking-tighter flex items-center gap-2"><ArrowUpRight size={20} className="text-blue-600"/> Log Sale</h2>
+              <h2 className="text-[18px] font-black uppercase tracking-tighter flex items-center gap-2">Sale</h2>
               <Card className="p-6 border-t-4 border-blue-600">
                 <form className="space-y-5" onSubmit={(e) => {
                   e.preventDefault();
@@ -414,19 +396,18 @@ const App: React.FC = () => {
                   e.currentTarget.reset();
                   alert('Sale Saved.');
                 }}>
-                  <Input label="Sale Date" name="date" type="date" required defaultValue={todayRaw} />
-                  <Select label="Product Sold" name="product" options={products.map(p => ({ label: p.name.toUpperCase(), value: p.id }))} />
-                  <Input label="No. of Boxes Sold" name="quantity" type="number" required />
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700 uppercase h-11 text-[13px]" type="submit">Confirm Sale</Button>
+                  <Input label="Date" name="date" type="date" required defaultValue={todayRaw} />
+                  <Select label="Product" name="product" options={products.map(p => ({ label: p.name.toUpperCase(), value: p.id }))} />
+                  <Input label="Boxes Sold" name="quantity" type="number" required />
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700 uppercase h-11" type="submit">Log Sale</Button>
                 </form>
               </Card>
            </div>
         )}
 
-        {/* LOG PURCHASE - NO LAYOUT SHIFT */}
         {activeTab === 'purchases' && (
            <div className="max-w-2xl mx-auto space-y-4">
-              <h2 className="text-[18px] font-black uppercase tracking-tighter flex items-center gap-2"><ShoppingCart size={20} className="text-emerald-600"/> Material Purchase</h2>
+              <h2 className="text-[18px] font-black uppercase tracking-tighter flex items-center gap-2">Purchase</h2>
               <Card className="p-6 border-t-4 border-emerald-600">
                 <form className="space-y-5" onSubmit={(e) => {
                   e.preventDefault();
@@ -440,10 +421,10 @@ const App: React.FC = () => {
                   e.currentTarget.reset();
                   alert('Purchase Saved.');
                 }}>
-                  <Input label="Purchase Date" name="date" type="date" required defaultValue={todayRaw} />
-                  <Select label="Item Purchased" name="item" options={inventory.filter(i => i.category !== 'Finished Good').map(i => ({ label: `${i.name} (${i.unit})`, value: i.id }))} />
-                  <Input label="Quantity Received" name="quantity" type="number" step="0.01" required />
-                  <Button variant="success" className="w-full uppercase h-11 text-[13px]" type="submit">Confirm Purchase</Button>
+                  <Input label="Date" name="date" type="date" required defaultValue={todayRaw} />
+                  <Select label="Material" name="item" options={inventory.filter(i => i.category !== 'Finished Good').map(i => ({ label: `${i.name} (${i.unit})`, value: i.id }))} />
+                  <Input label="Quantity" name="quantity" type="number" step="0.01" required />
+                  <Button variant="success" className="w-full uppercase h-11" type="submit">Log Purchase</Button>
                 </form>
               </Card>
            </div>
@@ -451,36 +432,35 @@ const App: React.FC = () => {
 
         {activeTab === 'reports' && (
            <div className="space-y-6 max-w-xl mx-auto">
-             <h2 className="text-[18px] font-black uppercase tracking-tighter px-2">Reports Hub</h2>
+             <h2 className="text-[18px] font-black uppercase tracking-tighter">Reports</h2>
              <div className="grid grid-cols-2 gap-3">
                <Card className="p-5 text-center flex flex-col items-center">
-                 <div className="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 mb-3"><Share2 size={24}/></div>
-                 <h4 className="font-black text-[11px] uppercase mb-4 tracking-wider">Daily Activity</h4>
+                 <div className="w-10 h-10 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 mb-3"><Share2 size={20}/></div>
+                 <h4 className="font-black text-[10px] uppercase mb-4 tracking-wider">Daily Report</h4>
                  <Button onClick={() => shareViaWhatsApp(generateDailyReport())} className="w-full text-[11px]">WhatsApp</Button>
                </Card>
                <Card className="p-5 text-center flex flex-col items-center">
-                 <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-600 mb-3"><Package size={24}/></div>
-                 <h4 className="font-black text-[11px] uppercase mb-4 tracking-wider">Stock Sheet</h4>
-                 <Button onClick={() => shareViaWhatsApp(generateBalanceReport())} variant="secondary" className="w-full text-emerald-700 border-emerald-100 text-[11px]">WhatsApp</Button>
+                 <div className="w-10 h-10 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-600 mb-3"><Package size={20}/></div>
+                 <h4 className="font-black text-[10px] uppercase mb-4 tracking-wider">Stock Sheet</h4>
+                 <Button onClick={() => shareViaWhatsApp(generateBalanceReport())} variant="secondary" className="w-full text-[11px]">WhatsApp</Button>
                </Card>
              </div>
              <div className="bg-slate-900 rounded-xl p-4">
-                <p className="text-[9px] text-slate-500 font-black uppercase mb-3 tracking-widest">Live Report Preview</p>
-                <pre className="text-emerald-400 text-[11px] font-mono font-bold whitespace-pre-wrap leading-tight">{generateDailyReport()}</pre>
+                <pre className="text-emerald-400 text-[11px] font-mono whitespace-pre-wrap leading-tight">{generateDailyReport()}</pre>
              </div>
            </div>
         )}
 
         {activeTab === 'settings' && (
           <div className="space-y-8 pb-10">
-            <h2 className="text-[18px] font-black uppercase tracking-tighter px-2">System Configuration</h2>
+            <h2 className="text-[18px] font-black uppercase tracking-tighter">Configuration</h2>
 
             <div className="space-y-3">
-              <h3 className="text-[12px] font-black uppercase tracking-widest text-indigo-600 px-2 flex items-center gap-2"><Box size={14}/> Pcs Per Box</h3>
-              <div className="grid grid-cols-2 gap-3 px-2">
+              <h3 className="text-[12px] font-black uppercase tracking-widest text-indigo-600 flex items-center gap-2"><Box size={14}/> Pcs Per Box</h3>
+              <div className="grid grid-cols-2 gap-3">
                 {tempProducts.map(p => (
                   <Card key={p.id} className="p-3">
-                    <label className="text-[10px] font-black uppercase text-slate-500">{p.name} Units/Box</label>
+                    <label className="text-[10px] font-black uppercase text-slate-500">{p.name}</label>
                     <input 
                       type="number"
                       className="w-full mt-1 border-b-2 border-slate-100 focus:border-indigo-500 outline-none text-[16px] font-black"
@@ -493,22 +473,15 @@ const App: React.FC = () => {
             </div>
 
             <div className="space-y-3">
-              <h3 className="text-[12px] font-black uppercase tracking-widest text-indigo-600 px-2 flex items-center gap-2"><FlaskConical size={14}/> Formulation (Grams/Pc)</h3>
+              <h3 className="text-[12px] font-black uppercase tracking-widest text-indigo-600 flex items-center gap-2"><FlaskConical size={14}/> Formulation (g/pc)</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {tempProducts.map(prod => (
-                  <Card key={prod.id} className="overflow-hidden border-2">
-                    <div className="bg-slate-900 p-2.5 flex justify-between items-center">
-                      <h4 className="font-black text-white text-[12px] uppercase">{prod.name} Recipe</h4>
-                      <span className="text-[9px] text-slate-400 font-black uppercase tracking-widest">{prod.weightPerPc}g Total</span>
+                  <Card key={prod.id} className="overflow-hidden">
+                    <div className="bg-slate-900 p-2 flex justify-between items-center text-white text-[11px] uppercase font-black">
+                      <span>{prod.name} Recipe</span>
                     </div>
                     <div className="p-1 max-h-[300px] overflow-y-auto">
                       <table className="w-full text-[11px]">
-                        <thead>
-                          <tr className="text-slate-400 border-b border-slate-100">
-                            <th className="px-2 py-2 text-left uppercase">Ingredient</th>
-                            <th className="px-2 py-2 text-center uppercase">G/Pc</th>
-                          </tr>
-                        </thead>
                         <tbody>
                           {prod.recipe.map(r => (
                             <tr key={r.itemId} className="border-b border-slate-50 last:border-0">
@@ -516,7 +489,7 @@ const App: React.FC = () => {
                               <td className="px-2 py-1.5">
                                 <input 
                                   type="number" step="0.001"
-                                  className="w-full text-center py-0.5 bg-slate-50 border border-slate-100 rounded font-black text-indigo-600"
+                                  className="w-full text-center py-0.5 bg-slate-50 border rounded font-black text-indigo-600"
                                   value={r.amountPerUnit}
                                   onChange={(e) => setTempProducts(prev => prev.map(p => {
                                     if (p.id !== prod.id) return p;
@@ -536,75 +509,36 @@ const App: React.FC = () => {
                 ))}
               </div>
             </div>
-
-            <div className="space-y-3">
-              <h3 className="text-[12px] font-black uppercase tracking-widest text-indigo-600 px-2 flex items-center gap-2"><Package size={14}/> Opening Stock</h3>
-              <Card className="overflow-hidden border-2">
-                <table className="w-full text-left">
-                  <thead className="bg-slate-50 text-[9px] font-black text-slate-400 uppercase tracking-widest">
-                    <tr>
-                      <th className="px-4 py-2">Item Name</th>
-                      <th className="px-4 py-2 text-center">Bal</th>
-                      <th className="px-4 py-2 text-center">Buf</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y text-[12px]">
-                    {tempInventory.map(item => (
-                      <tr key={item.id}>
-                        <td className="px-4 py-1.5 font-bold">{item.name}</td>
-                        <td className="px-4 py-1.5">
-                          <input 
-                            type="number" step="0.01"
-                            className="w-full text-center py-1 bg-white border rounded font-black focus:border-indigo-500 outline-none"
-                            value={item.currentStock}
-                            onChange={(e) => setTempInventory(prev => prev.map(inv => inv.id === item.id ? { ...inv, currentStock: Number(e.target.value) } : inv))}
-                          />
-                        </td>
-                        <td className="px-4 py-1.5">
-                          <input 
-                            type="number" step="0.01"
-                            className="w-full text-center py-1 bg-white border rounded font-black focus:border-indigo-500 outline-none"
-                            value={item.bufferStock}
-                            onChange={(e) => setTempInventory(prev => prev.map(inv => inv.id === item.id ? { ...inv, bufferStock: Number(e.target.value) } : inv))}
-                          />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </Card>
-            </div>
           </div>
         )}
       </main>
 
-      {/* MOBILE TAB BAR */}
-      <nav className="md:hidden bg-slate-900 border-t border-slate-800 fixed bottom-0 left-0 right-0 h-16 grid grid-cols-7 z-[100] shadow-[0_-4px_20px_rgba(0,0,0,0.3)]">
-        <MobileTab active={activeTab === 'dashboard'} onClick={() => setActiveTab('dashboard')} icon={<LayoutDashboard size={18}/>} />
-        <MobileTab active={activeTab === 'inventory'} onClick={() => setActiveTab('inventory')} icon={<Package size={18}/>} />
-        <MobileTab active={activeTab === 'production'} onClick={() => setActiveTab('production')} icon={<Factory size={18}/>} />
-        <MobileTab active={activeTab === 'purchases'} onClick={() => setActiveTab('purchases')} icon={<ShoppingCart size={18}/>} />
-        <MobileTab active={activeTab === 'sales'} onClick={() => setActiveTab('sales')} icon={<ArrowUpRight size={18}/>} />
-        <MobileTab active={activeTab === 'reports'} onClick={() => setActiveTab('reports')} icon={<Share2 size={18}/>} />
-        <MobileTab active={activeTab === 'settings'} onClick={() => setActiveTab('settings')} icon={<SettingsIcon size={18}/>} />
+      <nav className="md:hidden bg-slate-900 border-t border-slate-800 fixed bottom-0 left-0 right-0 h-16 grid grid-cols-7 z-[100]">
+        <MobileTab active={activeTab === 'dashboard'} onClick={() => setActiveTab('dashboard'} icon={<LayoutDashboard size={18}/>} />
+        <MobileTab active={activeTab === 'inventory'} onClick={() => setActiveTab('inventory'} icon={<Package size={18}/>} />
+        <MobileTab active={activeTab === 'production'} onClick={() => setActiveTab('production'} icon={<Factory size={18}/>} />
+        <MobileTab active={activeTab === 'purchases'} onClick={() => setActiveTab('purchases'} icon={<ShoppingCart size={18}/>} />
+        <MobileTab active={activeTab === 'sales'} onClick={() => setActiveTab('sales'} icon={<ArrowUpRight size={18}/>} />
+        <MobileTab active={activeTab === 'reports'} onClick={() => setActiveTab('reports'} icon={<Share2 size={18}/>} />
+        <MobileTab active={activeTab === 'settings'} onClick={() => setActiveTab('settings'} icon={<SettingsIcon size={18}/>} />
       </nav>
     </div>
   );
 };
 
-const NavTab: React.FC<{ active: boolean; onClick: () => void; icon: React.ReactNode; label: string }> = ({ active, onClick, icon, label }) => (
+const NavTab = ({ active, onClick, icon, label }: any) => (
   <button onClick={onClick} className={`flex items-center gap-1.5 px-3 py-1.5 rounded transition-all text-[11px] font-black uppercase ${active ? "bg-white text-slate-900" : "text-slate-400 hover:text-white"}`}>
     {icon} <span>{label}</span>
   </button>
 );
 
-const MobileTab: React.FC<{ active: boolean; onClick: () => void; icon: React.ReactNode }> = ({ active, onClick, icon }) => (
-  <button onClick={onClick} className={`flex items-center justify-center transition-all ${active ? "text-indigo-400 border-t-4 border-indigo-400 -mt-1" : "text-slate-500"}`}>
+const MobileTab = ({ active, onClick, icon }: any) => (
+  <button onClick={onClick} className={`flex items-center justify-center transition-all ${active ? "text-indigo-400" : "text-slate-500"}`}>
     {icon}
   </button>
 );
 
-const StatsCard: React.FC<{ title: string; value: number | string; icon: React.ReactNode }> = ({ title, value, icon }) => (
+const StatsCard = ({ title, value, icon }: any) => (
   <Card className="p-4 border-2">
     <div className="flex justify-between items-start mb-2">
       <div className="p-2 bg-slate-50 rounded-lg">{icon}</div>

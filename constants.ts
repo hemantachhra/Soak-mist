@@ -2,14 +2,9 @@
 import { StockItem, Product } from './types';
 
 export const INITIAL_INVENTORY: StockItem[] = [
-  // Finished Goods (Stored in Boxes) - Must appear first in list
   { id: 'mist_finished', name: 'Mist Boxes (Finished)', category: 'Finished Good', currentStock: 0, unit: 'boxes', bufferStock: 10 },
   { id: 'soak_finished', name: 'Soak Boxes (Finished)', category: 'Finished Good', currentStock: 0, unit: 'boxes', bufferStock: 10 },
-
-  // Shared Raw Materials
   { id: 'citric_acid', name: 'Citric Acid (Common)', category: 'Raw Material', currentStock: 0, unit: 'g', bufferStock: 5000 },
-  
-  // Mist Specific Raw Materials
   { id: 'water', name: 'Water', category: 'Raw Material', currentStock: 0, unit: 'g', bufferStock: 50000 },
   { id: 'colour_mist', name: 'Colour Mist (Orange/Yellow)', category: 'Raw Material', currentStock: 0, unit: 'g', bufferStock: 500 },
   { id: 'perfume_mist', name: 'Perfume (Mist)', category: 'Raw Material', currentStock: 0, unit: 'g', bufferStock: 1000 },
@@ -18,16 +13,12 @@ export const INITIAL_INVENTORY: StockItem[] = [
   { id: 'dmdm', name: 'DMDM', category: 'Raw Material', currentStock: 0, unit: 'g', bufferStock: 1000 },
   { id: 'pps', name: 'PPS', category: 'Raw Material', currentStock: 0, unit: 'g', bufferStock: 1000 },
   { id: 'mps', name: 'MPS', category: 'Raw Material', currentStock: 0, unit: 'g', bufferStock: 1000 },
-  
-  // Soak Specific Raw Materials
   { id: 'sodium_bicarb', name: 'Sodium Bi Carbonate', category: 'Raw Material', currentStock: 0, unit: 'g', bufferStock: 10000 },
   { id: 'starch', name: 'Starch', category: 'Raw Material', currentStock: 0, unit: 'g', bufferStock: 5000 },
   { id: 'salt', name: 'Salt', category: 'Raw Material', currentStock: 0, unit: 'g', bufferStock: 10000 },
   { id: 'colour_soak', name: 'Colour Soak (Red)', category: 'Raw Material', currentStock: 0, unit: 'g', bufferStock: 500 },
   { id: 'perfume_soak', name: 'Perfume Soak (Rose)', category: 'Raw Material', currentStock: 0, unit: 'g', bufferStock: 1000 },
   { id: 'rose_petals', name: 'Rose Petals', category: 'Raw Material', currentStock: 0, unit: 'g', bufferStock: 500 },
-
-  // Packaging
   { id: 'mist_pump', name: 'Mist Pump', category: 'Packaging', currentStock: 0, unit: 'pcs', bufferStock: 5000 },
   { id: 'bottles', name: 'Bottles', category: 'Packaging', currentStock: 0, unit: 'pcs', bufferStock: 5000 },
   { id: 'labels', name: 'Labels', category: 'Packaging', currentStock: 0, unit: 'pcs', bufferStock: 5000 },
