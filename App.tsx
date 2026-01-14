@@ -12,7 +12,8 @@ import {
   Save, 
   FlaskConical, 
   Box, 
-  X
+  X,
+  Droplets
 } from 'lucide-react';
 import { INITIAL_INVENTORY, PRODUCTS as INITIAL_PRODUCTS } from './constants';
 import { StockItem, Transaction, Product } from './types';
@@ -245,7 +246,12 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-slate-50 flex flex-col text-[14px] overflow-x-hidden">
       <header className="bg-slate-900 border-b border-slate-800 sticky top-0 z-[100] h-14 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
-          <h1 className="text-[16px] font-black text-white uppercase tracking-tighter">InvControl</h1>
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white shadow-inner">
+              <Droplets size={20} className="fill-current" />
+            </div>
+            <h1 className="text-[16px] font-black text-white uppercase tracking-tighter">Mist&Soak</h1>
+          </div>
           <nav className="hidden md:flex items-center gap-1 h-full">
             <NavTab active={activeTab === 'dashboard'} onClick={() => setActiveTab('dashboard')} icon={<LayoutDashboard size={16}/>} label="Home" />
             <NavTab active={activeTab === 'inventory'} onClick={() => setActiveTab('inventory')} icon={<Package size={16}/>} label="Stock" />
