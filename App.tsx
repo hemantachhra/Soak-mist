@@ -514,13 +514,13 @@ const App: React.FC = () => {
       </main>
 
       <nav className="md:hidden bg-slate-900 border-t border-slate-800 fixed bottom-0 left-0 right-0 h-16 grid grid-cols-7 z-[100]">
-        <MobileTab active={activeTab === 'dashboard'} onClick={() => setActiveTab('dashboard'} icon={<LayoutDashboard size={18}/>} />
-        <MobileTab active={activeTab === 'inventory'} onClick={() => setActiveTab('inventory'} icon={<Package size={18}/>} />
-        <MobileTab active={activeTab === 'production'} onClick={() => setActiveTab('production'} icon={<Factory size={18}/>} />
-        <MobileTab active={activeTab === 'purchases'} onClick={() => setActiveTab('purchases'} icon={<ShoppingCart size={18}/>} />
-        <MobileTab active={activeTab === 'sales'} onClick={() => setActiveTab('sales'} icon={<ArrowUpRight size={18}/>} />
-        <MobileTab active={activeTab === 'reports'} onClick={() => setActiveTab('reports'} icon={<Share2 size={18}/>} />
-        <MobileTab active={activeTab === 'settings'} onClick={() => setActiveTab('settings'} icon={<SettingsIcon size={18}/>} />
+        <MobileTab active={activeTab === 'dashboard'} onClick={() => setActiveTab('dashboard')} icon={<LayoutDashboard size={18}/>} />
+        <MobileTab active={activeTab === 'inventory'} onClick={() => setActiveTab('inventory')} icon={<Package size={18}/>} />
+        <MobileTab active={activeTab === 'production'} onClick={() => setActiveTab('production')} icon={<Factory size={18}/>} />
+        <MobileTab active={activeTab === 'purchases'} onClick={() => setActiveTab('purchases')} icon={<ShoppingCart size={18}/>} />
+        <MobileTab active={activeTab === 'sales'} onClick={() => setActiveTab('sales')} icon={<ArrowUpRight size={18}/>} />
+        <MobileTab active={activeTab === 'reports'} onClick={() => setActiveTab('reports')} icon={<Share2 size={18}/>} />
+        <MobileTab active={activeTab === 'settings'} onClick={() => setActiveTab('settings')} icon={<SettingsIcon size={18}/>} />
       </nav>
     </div>
   );
